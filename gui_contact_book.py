@@ -1,12 +1,11 @@
 ### Contact book (with GUI)
 ### A program that allows users to add, search, and delete contacts.
-
+"""
 import tkinter as tk
-from tkinter import ttk
 from tkinter import messagebox
 
 
-
+'''
 ### Application class
 class app(tk.Tk):
 	def __init__(self, title, size):
@@ -23,7 +22,7 @@ class app(tk.Tk):
 
 		# run 
 		self.mainloop()
-
+'''
 
 
 ### Contact class
@@ -88,7 +87,6 @@ def delete_contact():
 
 
 
-book = contact_book()
 
 
 ### Contact book with samples
@@ -100,7 +98,7 @@ contactList = {'John Jo': '555-555-5555', 'Mugi Mu': '556-556-5656', 'Mike Mi' :
 ### run
 app = tk.Tk()
 app.title = ("Contact Book")
-
+book = contact_book()
 
 name_entry = tk.Entry(app, width=30)
 name_entry.pack(pady=10)
@@ -118,5 +116,123 @@ add_button.pack(side=tk.LEFT, padx=5)
 
 contact_list = tk.Listbox(app, width=50, height=10)
 contact_list.pack(pady=10)
+
+app.mainloop()
+"""
+
+
+
+
+
+
+
+
+
+import tkinter as tk
+from tkinter import messagebox
+
+
+
+class Contact:
+    def __init__(self, name, phone):
+        self.name = name
+        self.phone = phone
+
+    def __str__(self):
+        return f"{self.name}: {self.phone}"
+
+
+class ContactBook:
+    def __init__(self):
+        self.contacts = []
+
+    def add_contact(self, contact):
+        self.contacts.append(contact)
+
+    def delete_contact(self, index):
+        if 0 <= index < len(self.contacts):
+            del self.contacts[index]
+
+    def search_contact(self, name):
+        for contact in self.contacts:
+            if contact.name.lower() == name.lower():
+                return contact
+        return None
+
+
+
+def add_contact():
+    name = name_entry.get()
+    phone = phone_entry.get()
+    if name and phone:
+        contact_book.add_contact(Contact(name, phone))
+        #name_entry.delete(0, tk.END)
+        #phone_entry.delete(0, tk.END)
+        listbox.delete(0, tk.END)
+        for contact in contact_book.contacts:
+            listbox.insert(tk.END, str(contact))
+    else:
+        messagebox.showwarning("Input Error", "Please enter both name and phone number.")
+
+
+def delete_contact():
+    selected_index = listbox.curselection()
+    if selected_index:
+        index = selected_index[0]
+        contact_book.delete_contact(index)
+        listbox.delete(index)
+
+        '''
+        contact_book.delete_contact(selected_index[0])
+        listbox.delete_contact(selected_index[0])
+        '''
+    else:
+        messagebox.showwarning("Selection Error", "Please select a contact to delete.")
+
+
+def search_contact():
+    search_entry = name_entry.get().lower()
+    listbox.selection_clear(0, tk.END)  
+    found = False
+    index = 0  
+    for contact in contact_book.contacts:
+        if search_entry in contact.name.lower():
+            listbox.selection_set(index)  
+            listbox.see(index)  
+            found = True
+        index += 1 
+    if not found:
+        messagebox.showinfo("Search Result", "No matching contacts found.")
+
+
+
+
+app = tk.Tk()
+app.title("Contact Book")
+
+contact_book = ContactBook()
+
+name_entry = tk.Entry(app, width=30)
+name_entry.pack(pady=10)
+name_entry.insert(0, "Name")
+
+phone_entry = tk.Entry(app, width=30)
+phone_entry.pack(pady=10)
+phone_entry.insert(0, "Phone")
+
+button_frame = tk.Frame(app)
+button_frame.pack(pady=10)
+
+add_button = tk.Button(button_frame, text="Add Contact", command=add_contact)
+add_button.pack(side=tk.LEFT, padx=5)
+
+delete_button = tk.Button(button_frame, text="Delete Contact", command=delete_contact)
+delete_button.pack(side=tk.LEFT, padx=5)
+
+search_button = tk.Button(button_frame, text="Search Contact", command=search_contact)
+search_button.pack(side=tk.LEFT, padx=5)
+
+listbox = tk.Listbox(app, width=50, height=10)
+listbox.pack(pady=10)
 
 app.mainloop()
