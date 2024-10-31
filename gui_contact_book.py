@@ -23,10 +23,12 @@ class app(tk.Tk):
 class contactBook:
     def __init__(self):
         self.contacts = []
+        self.load_contact_list()
 
 
     def add_contact_to_book(self, contact):
         self.contacts.append(contact)
+        self.save_contact_list()
 
 
     def search_contact_in_book(self, search_name):
@@ -43,6 +45,24 @@ class contactBook:
     def delete_contact_from_book(self, index):
         if 0 <= index < len(self.contacts):
             del self.contacts[index]
+            self.save_contact_list()
+
+
+    def save_contact_list(self):
+        with open("contact_list.txt", "w") as file:
+            for contact in self.contacts:
+                file.write(f"{contact.name},{contact.phone},{contact.email}\n")
+
+
+    def load_contact_list(self):
+        try:
+            with open("contact_list.txt", "r") as file:
+                for contact in file:
+                    name, phone, email = contact.strip().split(',')
+                    self.contacts.append(contactInfo(name, phone, email))
+
+        except FileNotFoundError:
+            pass
 
 
 
@@ -61,6 +81,18 @@ class contactInfo:
 
 
 
+def update_list():
+    """
+    Docstring:
+    A function that refreshes the contact list display.
+    """
+    listbox.delete(0, tk.END)
+    for contact in contact_book.contacts:
+        listbox.insert(tk.END, str(contact))
+
+
+
+
 def add_contact():
     """
     Docstring:
@@ -72,11 +104,13 @@ def add_contact():
 
     if name and phone and email:
         contact_book.add_contact_to_book(contactInfo(name, phone, email))
-        listbox.delete(0, tk.END)  
-        for contact in contact_book.contacts:
-            listbox.insert(tk.END, str(contact))
+        update_list()
+        name_entry.delete(0, tk.END)
+        phone_entry.delete(0, tk.END)
+        email_entry.delete(0, tk.END)
     else:
         messagebox.showwarning("Input Error", "Please enter both name and phone number.")
+
 
 
 
@@ -88,6 +122,7 @@ def search_contact():
     search_entry = name_entry.get().lower()
     listbox.selection_clear(0, tk.END)  
     search_result = contact_book.search_contact_in_book(search_entry)
+    update_list()
 
     if search_result:
         for index in search_result:
@@ -95,6 +130,7 @@ def search_contact():
             listbox.see(index)
     else:
         messagebox.showinfo("Search Result", "No matching contacts found.")
+
 
 
 
@@ -111,6 +147,7 @@ def delete_contact():
         listbox.delete(index)
     else:
         messagebox.showwarning("Selection Error", "Please select a contact to delete.")
+
 
 
 
@@ -148,9 +185,10 @@ delete_button = tk.Button(button_frame, text = "Delete Contact", command = delet
 delete_button.pack(side = tk.LEFT, padx = 10)
 
 
-### Create contact list display
+### Create/update contact list display
 listbox = tk.Listbox(app, width = 50, height = 10)
 listbox.pack(pady = 10)
+update_list()
 
 
 ### Run
