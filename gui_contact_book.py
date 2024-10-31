@@ -7,18 +7,7 @@ from tkinter import messagebox
 
 
 
-class contactInfo:
-    def __init__(self, name, phone, email):
-        self.name = name
-        self.phone = phone
-        self.email = email
-
-
-    def __str__(self):
-        return f"{self.name}: {self.phone}, {self.email} "
-
-
-
+### Contact book class
 class contactBook:
     def __init__(self):
         self.contacts = []
@@ -46,8 +35,25 @@ class contactBook:
 
 
 
+### Contact information class
+class contactInfo:
+    def __init__(self, name, phone, email):
+        self.name = name
+        self.phone = phone
+        self.email = email
+
+
+    def __str__(self):
+        return f"{self.name}: {self.phone}, {self.email} "
+
+
+
 
 def add_contact():
+    """
+    Docstring:
+    A function that gets the entries for name, phone, and email then uses that information to create a new contact using the add_contact_to_book function in the contactBook class.
+    """
     name = name_entry.get()
     phone = phone_entry.get()
     email = email_entry.get()
@@ -63,6 +69,10 @@ def add_contact():
 
 
 def search_contact():
+    """
+    Docstring:
+    A function that searches for the name entry using the search_contact_in_book function from the contactBook class. It will then highlight the matching contact in the contact list.
+    """
     search_entry = name_entry.get().lower()
     listbox.selection_clear(0, tk.END)  
     search_result = contact_book.search_contact_in_book(search_entry)
@@ -77,6 +87,10 @@ def search_contact():
 
 
 def delete_contact():
+    """
+    Docstring:
+    A function that deletes the current selected contact using the delete_contact_from_book function from the contactBook class.
+    """
     selected_index = listbox.curselection()
 
     if selected_index:
@@ -88,12 +102,14 @@ def delete_contact():
 
 
 
-
+### Initialize window
 app = tk.Tk()
 app.title("Contact Book")
 
 contact_book = contactBook()
 
+
+### Create name, phone, and email entries
 name_entry = tk.Entry(app, width=30)
 name_entry.pack(pady=10)
 name_entry.insert(0, "Name")
@@ -109,16 +125,22 @@ email_entry.insert(0, "Email")
 button_frame = tk.Frame(app)
 button_frame.pack(pady=10)
 
+
+### Create add, search, and delete buttons
 add_button = tk.Button(button_frame, text="Add Contact", command=add_contact)
 add_button.pack(side=tk.LEFT, padx=5)
-
-delete_button = tk.Button(button_frame, text="Delete Contact", command=delete_contact)
-delete_button.pack(side=tk.LEFT, padx=5)
 
 search_button = tk.Button(button_frame, text="Search Contact", command=search_contact)
 search_button.pack(side=tk.LEFT, padx=5)
 
+delete_button = tk.Button(button_frame, text="Delete Contact", command=delete_contact)
+delete_button.pack(side=tk.LEFT, padx=5)
+
+
+### Create contact list display
 listbox = tk.Listbox(app, width=50, height=10)
 listbox.pack(pady=10)
 
+
+### Run
 app.mainloop()
