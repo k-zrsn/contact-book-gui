@@ -8,13 +8,14 @@ from tkinter import messagebox
 
 
 class contactInfo:
-    def __init__(self, name, phone):
+    def __init__(self, name, phone, email):
         self.name = name
         self.phone = phone
+        self.email = email
 
 
     def __str__(self):
-        return f"{self.name}: {self.phone}"
+        return f"{self.name}: {self.phone}, {self.email} "
 
 
 
@@ -49,9 +50,10 @@ class contactBook:
 def add_contact():
     name = name_entry.get()
     phone = phone_entry.get()
+    email = email_entry.get()
 
-    if name and phone:
-        contact_book.add_contact_to_book(contactInfo(name, phone))
+    if name and phone and email:
+        contact_book.add_contact_to_book(contactInfo(name, phone, email))
         listbox.delete(0, tk.END)  
         for contact in contact_book.contacts:
             listbox.insert(tk.END, str(contact))
@@ -99,6 +101,10 @@ name_entry.insert(0, "Name")
 phone_entry = tk.Entry(app, width=30)
 phone_entry.pack(pady=10)
 phone_entry.insert(0, "Phone")
+
+email_entry = tk.Entry(app, width=30)
+email_entry.pack(pady=10)
+email_entry.insert(0, "Email")
 
 button_frame = tk.Frame(app)
 button_frame.pack(pady=10)
