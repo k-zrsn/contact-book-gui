@@ -6,6 +6,18 @@ from tkinter import messagebox
 
 
 
+### App class
+class app(tk.Tk):
+	def __init__(self, title, size):
+		
+		# main setup
+		super().__init__()
+		self.title(title)
+		self.geometry(f'{size[0]}x{size[1]}')
+		self.minsize(size[0],size[1])
+
+
+
 
 ### Contact book class
 class contactBook:
@@ -103,43 +115,42 @@ def delete_contact():
 
 
 ### Initialize window
-app = tk.Tk()
-app.title("Contact Book")
+app = app('Contact Book', (325, 350))
 
 contact_book = contactBook()
 
 
 ### Create name, phone, and email entries
-name_entry = tk.Entry(app, width=30)
-name_entry.pack(pady=10)
+name_entry = tk.Entry(app, width = 20)
+name_entry.pack(pady = 10)
 name_entry.insert(0, "Name")
 
-phone_entry = tk.Entry(app, width=30)
-phone_entry.pack(pady=10)
+phone_entry = tk.Entry(app, width = 20)
+phone_entry.pack(pady = 10)
 phone_entry.insert(0, "Phone")
 
-email_entry = tk.Entry(app, width=30)
-email_entry.pack(pady=10)
+email_entry = tk.Entry(app, width = 20)
+email_entry.pack(pady = 10)
 email_entry.insert(0, "Email")
 
 button_frame = tk.Frame(app)
-button_frame.pack(pady=10)
+button_frame.pack(pady = 10)
 
 
 ### Create add, search, and delete buttons
-add_button = tk.Button(button_frame, text="Add Contact", command=add_contact)
-add_button.pack(side=tk.LEFT, padx=5)
+add_button = tk.Button(button_frame, text = "Add Contact", command = add_contact)
+add_button.pack(side = tk.LEFT, padx = 10)
 
-search_button = tk.Button(button_frame, text="Search Contact", command=search_contact)
-search_button.pack(side=tk.LEFT, padx=5)
+search_button = tk.Button(button_frame, text = "Search Contact", command = search_contact)
+search_button.pack(side = tk.LEFT, padx = 10)
 
-delete_button = tk.Button(button_frame, text="Delete Contact", command=delete_contact)
-delete_button.pack(side=tk.LEFT, padx=5)
+delete_button = tk.Button(button_frame, text = "Delete Contact", command = delete_contact)
+delete_button.pack(side = tk.LEFT, padx = 10)
 
 
 ### Create contact list display
-listbox = tk.Listbox(app, width=50, height=10)
-listbox.pack(pady=10)
+listbox = tk.Listbox(app, width = 50, height = 10)
+listbox.pack(pady = 10)
 
 
 ### Run
